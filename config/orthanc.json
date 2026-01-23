@@ -1,0 +1,47 @@
+{
+  "Name": "Ministria e Shëndetësisë - PACS",
+  "StorageDirectory": "/var/lib/orthanc/db",
+  "IndexDirectory": "/var/lib/orthanc/db",
+  "StorageCompression": false,
+  "MaximumStorageSize": 0,
+  "MaximumPatientCount": 0,
+
+  "HttpServerEnabled": true,
+  "HttpPort": 8042,
+  "HttpDescribeErrors": true,
+  "HttpCompressionEnabled": true,
+
+  "DicomServerEnabled": true,
+  "DicomAet": "MOH_ALBANIA",
+  "DicomPort": 4242,
+  "DicomCheckCalledAet": false,
+  "DicomAlwaysAllowEcho": true,
+  "DicomAlwaysAllowStore": true,
+  "DicomAlwaysAllowFind": true,
+  "DicomAlwaysAllowFindWorklist": true,
+  "DicomAlwaysAllowGet": true,
+  "DicomAlwaysAllowMove": true,
+  "UnknownSopClassAccepted": true,
+
+  "DefaultEncoding": "Utf8",
+  "AcceptedTransferSyntaxes": ["*"],
+  "StableAge": 60,
+
+  "AuthenticationEnabled": false,
+  "RegisteredUsers": {
+    "admin": "moh_admin_2024"
+  },
+
+  "RemoteAccessAllowed": true,
+  "SslEnabled": false,
+
+  "DicomModalities": {},
+  "OrthancPeers": {},
+
+  "JobsHistorySize": 100,
+  "SaveJobs": true,
+  "HttpThreadsCount": 50,
+
+  "LuaScripts": [],
+  "Plugins": []
+}

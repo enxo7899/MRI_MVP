@@ -1,0 +1,21 @@
+Flask==3.0.0
+Pillow==10.1.0
+numpy==1.24.3
+nibabel==5.2.0
+pydicom==2.4.4
+pydicom-seg==0.4.1
+pylibjpeg==2.0.0
+pylibjpeg-libjpeg==2.0.0
+python-gdcm==3.0.23.1
+Werkzeug==3.0.1
+
+# AI Model Dependencies
+totalsegmentator==2.2.1
+torch==2.1.0
+SimpleITK==2.3.1
+scipy==1.11.4
+scikit-image==0.22.0
+requests==2.31.0
+nnunetv2==2.2.1
+acvl-utils==0.2
+dicom2nifti==2.4.10

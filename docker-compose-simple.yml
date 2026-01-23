@@ -1,0 +1,35 @@
+# ============================================================================
+# MINISTRIA E SHËNDETËSISË DHE MBROJTJES SOCIALE
+# MRI Analysis Platform - Simplified Docker Compose
+# ============================================================================
+
+networks:
+  mri-net:
+    driver: bridge
+
+volumes:
+  ai-models:
+    name: totalsegmentator-models
+
+services:
+  # ==========================================================================
+  # MRI Analysis Web Application
+  # ==========================================================================
+  mri-app:
+    build:
+      context: ./mri-app
+      dockerfile: Dockerfile
+    container_name: moh-mri-analyzer
+    restart: "no"  # Disable auto-restart to prevent interruption during AI processing
+    ports:
+      - "5001:5000"
+    volumes:
+      - ai-models:/app/models
+    networks:
+      - mri-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5000/health || exit 1"]
+      interval: 60s
+      timeout: 30s
+      retries: 10
+      start_period: 900s  # 15 minutes for model download and first analysis
