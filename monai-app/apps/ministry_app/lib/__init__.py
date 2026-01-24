@@ -1,1 +1,0 @@
-"""Ministry App Library Package"""
