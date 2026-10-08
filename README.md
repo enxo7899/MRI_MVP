@@ -1,80 +1,60 @@
 # MRI Analysis System
 
-## 🇦🇱 Ministria e Shëndetësisë dhe Mbrojtjes Sociale - Republika e Shqipërisë
+Proposal-stage prototype built for Albania's Ministry of Health and Social Protection: upload a scan, get automatic organ segmentation and a clinical-style report in Albanian.
 
-Professional AI-powered MRI scan analysis system.
+> **Medical disclaimer:** research prototype. It assists clinicians and must never be the sole basis for a clinical decision. Every AI-generated report requires review by a qualified radiologist.
 
----
+## What it does
 
-## 🚀 Quick Start
+1. **Upload** a scan in NIfTI (`.nii`, `.nii.gz`), DICOM (`.dcm`) or image format (`.png`, `.jpg`).
+2. **Analyse.** [TotalSegmentator](https://github.com/wasserth/TotalSegmentator) (nnU-Net, PyTorch) segments the organs in a background worker while the UI shows live progress.
+3. **Report.** A generated report in Albanian summarises the segmented structures for the reviewing radiologist.
 
-### Option 1: Docker (Recommended)
+## Architecture
+
+```
+Browser ──► Flask app (app.py) ──► job queue (job_manager.py) ──► async worker (async_worker.py)
+                                                                   └─► segmentation engine (engine_mri.py, TotalSegmentator / nnU-Net)
+                                                                   └─► report generator (medical_report.py, translations.py)
+```
+
+- **Flask** serves the UI and a JSON API.
+- Long-running segmentation runs **asynchronously**, so uploads return immediately and the UI polls for progress.
+- Everything ships as a **Docker** image (`mri-app/Dockerfile`, `docker-compose-simple.yml`).
+
+## Run it
+
+**Docker (recommended)**
 ```bash
 chmod +x start-mri.sh
-./start-mri.sh
+./start-mri.sh            # then open http://localhost:5001
 ```
-**Open:** http://localhost:5001
 
-### Option 2: Local Development
+**Local**
 ```bash
 cd mri-app
 pip install -r requirements.txt
-python app.py
-```
-**Open:** http://localhost:5000
-
----
-
-## 📋 Features
-
-- **AI-Powered Analysis** - Automatic organ segmentation
-- **Medical-Grade Reports** - Professional Albanian reports with clinical assessments
-- **Multiple Formats** - NIfTI (.nii, .nii.gz), DICOM (.dcm), images (.png, .jpg)
-- **Real-time Progress** - Live progress tracking with visual feedback
-- **Professional UI** - Modern, responsive medical interface
-
----
-
-## 🔧 How It Works
-
-1. **Upload** - Drag & drop or select MRI scan file
-2. **Analyze** - AI processes and segments organs
-3. **Report** - View professional medical report in Albanian
-
----
-
-## 📁 Project Structure
-
-```
-albania-moh-ai/
-├── mri-app/
-│   ├── app.py              # Flask web server
-│   ├── engine_mri.py       # AI segmentation engine
-│   ├── async_worker.py     # Background processing
-│   ├── medical_report.py   # Report generator
-│   ├── job_manager.py      # Job queue management
-│   ├── translations.py     # Albanian translations
-│   └── templates/
-│       └── index.html      # Professional UI
-├── docker-compose-simple.yml
-├── start-mri.sh
-└── README.md
+python app.py             # then open http://localhost:5000
 ```
 
+Two sample abdominal CT volumes are in `test-mri-scans/`. More open datasets: [OpenNeuro](https://openneuro.org/), [IXI](https://brain-development.org/ixi-dataset/).
+
+## Project structure
+
+```
+mri-app/
+├── app.py              # Flask web server and API
+├── engine_mri.py       # segmentation engine (TotalSegmentator / nnU-Net)
+├── async_worker.py     # background processing
+├── job_manager.py      # job queue and progress tracking
+├── medical_report.py   # report generator
+├── translations.py     # Albanian labels and report text
+└── templates/index.html
+```
+
+## Status
+
+Prototype built for a Ministry of Health proposal; further development depends on the proposal moving forward.
+
 ---
-
-## 🧪 Test Data
-
-Download free MRI datasets:
-- [OpenNeuro](https://openneuro.org/)
-- [IXI Dataset](https://brain-development.org/ixi-dataset/)
-
----
-
-## ⚕️ Medical Disclaimer
-
-This system assists medical professionals and **must not** be used as sole basis for clinical decisions. All AI-generated reports require review by qualified radiologists.
-
----
-
-**© 2026 Ministria e Shëndetësisë dhe Mbrojtjes Sociale**
+*Shqip:* Sistem prototip për analizën e skanimeve MRI për Ministrinë e Shëndetësisë dhe Mbrojtjes Sociale. Raportet duhet të rishikohen gjithmonë nga një radiolog i kualifikuar.
